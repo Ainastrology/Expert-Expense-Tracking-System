@@ -1,24 +1,31 @@
 const express = require('express');
 const cors = require('cors');
+const { db } = require('./db/db');
+const {readdirSync} = require('fs');
 const app = express();
-require('dotenv').config()
+
+require('dotenv').config();
+
+const PORT =  process.env.PORT || 5000;
+
+// Middleware
+app.use(express.json());
+app.use(cors());
+
+// routes
+readdirSync('./routes').map((route) => app.use('/api/v1', require('./routes/' + route)))
 
 
-const PORT = process.env.PORT
+// readdirSync('./routes').forEach((file) => {
+//     const route = require(`./routes/${file}`);
+//     app.use('/api/v1', route);
+//   });
 
-//middleware
-app.use(express.json())
-app.use(cors())
-
-app.get('/', (req, res) => {
-    res.send('Hello World');
-})
 const server = () => {
-    app.listen(PORT, ()=> {
-        console.log("Tracking 1.0 on port:", PORT);
-    }) 
-
-
+    db()
+    app.listen(PORT, () => {
+        console.log('listening to port: ', PORT)
+    })
 }
 
 server()
