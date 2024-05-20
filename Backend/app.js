@@ -16,11 +16,6 @@ app.use(cors());
 readdirSync('./routes').map((route) => app.use('/api/v1', require('./routes/' + route)))
 
 
-// readdirSync('./routes').forEach((file) => {
-//     const route = require(`./routes/${file}`);
-//     app.use('/api/v1', route);
-//   });
-
 const server = () => {
     db()
     app.listen(PORT, () => {
