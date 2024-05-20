@@ -1,13 +1,13 @@
-const IncomeSchema = require("../models/IncomeModel");
+const ExpenseSchema = require("../models/ExpenseModel");
 
-exports.addIncome = async (req, res) => {
+exports.addExpense = async (req, res) => {
     const { title, amount, category, description, date } = req.body;
 
     // Convert amount to a number
     const numericAmount = Number(amount);
 
     // Create the income object
-    const income = new IncomeSchema({
+    const expense = new ExpenseSchema({
         title,
         amount: numericAmount,
         category,
@@ -24,27 +24,27 @@ exports.addIncome = async (req, res) => {
             return res.status(400).json({ message: 'Amount must be a positive number!' });
         }
 
-        await income.save();
-        res.status(200).json({ message: 'Income Added Successfully!' });
+        await expense.save();
+        res.status(200).json({ message: 'Expense Added Successfully!' });
     } catch (error) {
-        res.status(500).json({ message: 'An error occurred while adding income' });
+        res.status(500).json({ message: 'An error occurred while adding expense' });
     }
 };
 
-exports.getIncomes = async (req, res) => {
+exports.getExpense = async (req, res) => {
     try {
-        const incomes = await IncomeSchema.find().sort({createdAt: -1});
-        res.status(200).json(incomes);
+        const expense = await ExpenseSchema.find().sort({createdAt: -1});
+        res.status(200).json(expense);
     } catch (error) {
         res.status(500).json({message: 'Server Error!'});
     }
 };
 
-exports.deleteIncome = async (req, res) => {
+exports.deleteExpense = async (req, res) => {
     const {id} = req.params; // req.params are those object that we're gonna pass as an id so that it could be deleted
-    IncomeSchema.findByIdAndDelete(id)
-    .then((income) => {
-        res.status(200).json({message: 'Income Deleted Successfully!'});
+    ExpenseSchema.findByIdAndDelete(id)
+    .then((expense) => {
+        res.status(200).json({message: 'Expense Deleted Successfully!'});
     })
     .catch((error) => {
         res.status(500).json({message: 'Server Error!'});
